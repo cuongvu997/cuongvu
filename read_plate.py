@@ -27,7 +27,7 @@ def fine_tune(lp):
     return newString
 
 # Đường dẫn ảnh
-img_path = "C:/Users/vuong/Desktop/new1/Detection_LP/test06.jpg"
+img_path = "C:/Users/vuong/Desktop/new1/Detection_LP/test02.jpg"
 
 # Load model LP detection
 wpod_net_path = "wpod-net_update1.json"
@@ -55,8 +55,9 @@ bound_dim = min(side, Dmax)
 # =============================================================================
 
 
-
-_ , LpImg, lp_type = detect_lp(wpod_net, im2single(YoloImg), bound_dim, lp_threshold=0.5)
+# =============================================================================
+# _ , LpImg, lp_type = detect_lp(wpod_net, im2single(YoloImg), bound_dim, lp_threshold=0.5)
+# =============================================================================
 
 # Cau hinh tham so cho model SVM
 digit_w = 30 # Kich thuoc ki tu
@@ -64,13 +65,15 @@ digit_h = 60 # Kich thuoc ki tu
 
 model_svm = cv2.ml.SVM_load('svm.xml')
 
+LpImg=im2single(YoloImg)
+
 if (len(LpImg)):
 
     # Chuyen doi anh bien so
-    LpImg[0] = cv2.convertScaleAbs(LpImg[0], alpha=(255.0))
-    roi = LpImg[0]
+    LpImg = cv2.convertScaleAbs(LpImg, alpha=(255.0))
+    roi = LpImg
     # Chuyen anh bien so ve gray
-    gray = cv2.cvtColor( LpImg[0], cv2.COLOR_BGR2GRAY)
+    gray = cv2.cvtColor( LpImg, cv2.COLOR_BGR2GRAY)
 
 
     # Ap dung threshold de phan tach so va nen
@@ -119,11 +122,11 @@ if (len(LpImg)):
     cv2.waitKey()
 
     # Viet bien so len anh
-    cv2.putText(YoloImg,fine_tune(plate_info),(50, 50), cv2.FONT_HERSHEY_PLAIN, 3.0, (0, 0, 255), lineType=cv2.LINE_AA)
+    cv2.putText(Ivehicle,fine_tune(plate_info),(50, 50), cv2.FONT_HERSHEY_PLAIN, 3.0, (0, 0, 255), lineType=cv2.LINE_AA)
 
     # Hien thi anh
     print("Bien so=", plate_info)
-    cv2.imshow("Hinh anh output",YoloImg)
+    cv2.imshow("Hinh anh output",Ivehicle)
     cv2.waitKey()
 
 

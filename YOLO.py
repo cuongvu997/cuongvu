@@ -86,15 +86,25 @@ def detect(args,imagepath):
         w = box[2]
         h = box[3]
         draw_prediction(image, class_ids[i], confidences[i], round(x), round(y), round(x + w), round(y + h))
-    
-    cv2.imshow("object detection", image)
-    end = time.time()
-    print("YOLO Execution time: " + str(end-start))
-    cv2.waitKey()
-    cv2.imwrite("object-detection.jpg", image)
-    cv2.destroyAllWindows()
-    
-    return image
+        croppedImage = image[int(y):int(y+h),int(x):int(x+w)]
+        
+        if 0< w/h<= 2.5:
+            croppedImage = cv2.resize(croppedImage,(400,400))
+        else:
+            croppedImage = cv2.resize(croppedImage,(1600,400))
+    if "croppedImage" in locals():
+        
+        cv2.imshow("object detection", croppedImage)
+        end = time.time()
+        print("YOLO Execution time: " + str(end-start))
+        cv2.waitKey()
+        cv2.imwrite("object-detection.jpg", croppedImage)
+        cv2.destroyAllWindows()
+        
+        return croppedImage
+    else:
+        print("no plate detected")
+        
 if __name__ == "__main__":
     while True:
         path=input("path = ")
